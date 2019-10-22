@@ -15,37 +15,38 @@ import com.nationwide.flightlog.data.Airfield;
 import com.nationwide.flightlog.data.Flight;
 import com.nationwide.flightlog.repos.AirfieldRepo;
 import com.nationwide.flightlog.repos.FlightRepo;
+import com.nationwide.flightlog.services.AirfieldService;
 
 
 @RestController
 public class AirfieldController {
 	
 	@Autowired
-	private AirfieldRepo repo;
+	private AirfieldService service;
 	
-	@GetMapping("/showallAirfield")
-	public ArrayList<Airfield> showall() {
-		return repo.findAll();
+	@GetMapping("/showAllAirfield")
+	public ArrayList<Airfield> showAll() {
+		return service.showAll();
 	}
 	
 	@GetMapping("/filterAirfieldId/{R}")
 	public Airfield showId(@PathVariable int R) {
-		return repo.findByIdnumber(R);
+		return service.showId(R);
 	}
 	
 	@GetMapping("/LandingFeeLessThan/{X}")
-	public ArrayList<Airfield> findLessThan(Float X) {
-		return repo.findLessThan(X);
+	public ArrayList<Airfield> findLessThan(@PathVariable Float X) {
+		return service.findLessThan(X);
 	}
 	
 	@GetMapping("/LandingFeeMoreThan/{X}")
-	public ArrayList<Airfield> findMoreThan(Float X) {
-		return repo.findGreaterThan(X);
+	public ArrayList<Airfield> findMoreThan(@PathVariable Float X) {
+		return service.findMoreThan(X);
 	}
 	
 	@GetMapping("/LandingFeeBetween/{X}/{Y}")
-	public ArrayList<Airfield> findBetween(Float X, Float Y) {
-		return repo.findBetween(X, Y);
+	public ArrayList<Airfield> findBetween(@PathVariable Float X, @PathVariable Float Y) {
+		return service.findBetween(X, Y);
 	}
 	
 	@PostMapping("saveAirfield/{Pic}/{Des}/{Tip}/{Pro}/{Con}/{Fee}")
@@ -56,17 +57,13 @@ public class AirfieldController {
 			@PathVariable String Pro,
 			@PathVariable String Con,
 			@PathVariable float Fee) {
-		int ID = (int)repo.count() + 1;
-		Airfield A1 = new Airfield(ID, Pic, Des, Tip, Pro, Con, Fee);
-		repo.save(A1);
-		return "New Airfield Saved";
+		return service.saveWithoutID(Pic, Des, Tip, Pro, Con, Fee);
 	}
 	
 	@DeleteMapping("/deleteAirfield/{ID}")
 	public String deleteAirfield(@PathVariable int ID) {
-		Airfield A = repo.findByIdnumber(ID);
-		repo.delete(A);
-		return "Airfield Deleted";
+		return service.deleteAirfield(ID);
 	}
+	
 
 }

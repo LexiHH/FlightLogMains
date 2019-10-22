@@ -16,5 +16,9 @@ public interface FlightRepo extends JpaRepository<Flight, Integer> {
 	public ArrayList<Flight> findByFlightdate(Date x);
 	public ArrayList<Flight> findByPassengers(int x);
 	public ArrayList<Flight> findByAirfield(String x);
+	
+	public int sumAllFlighttime();
+	
+	public int sumFlighttimeDates(Date D1, Date D2);
 
 }

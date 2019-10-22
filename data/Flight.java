@@ -4,10 +4,16 @@ import java.sql.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "Flight")
+@NamedQuery( name = "Flight.sumAllFlighttime",
+			query = "select sum(f.flighttime) from Flight f")
+@NamedQuery(name = "Flight.sumFlighttimeDates",
+			query = "select sum(f.flighttime) from Flight f where f.flightdate>=?1 and f.flightdate<=?2")
+
 public class Flight {
 	@Id
 	private int idnumber;
