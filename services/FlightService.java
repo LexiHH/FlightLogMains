@@ -1,6 +1,7 @@
 package com.nationwide.flightlog.services;
 
 import java.sql.Date;
+
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,11 +41,18 @@ public class FlightService {
 		return repo.findByAirfield(R);
 	}
 	
-	public String saveWithoutID(String Pic, String Des, int Time, Date Dt, int Pass, String Air) {
-		int ID = (int) (repo.count() + 1);
-		Flight F1 = new Flight(ID, Pic, Des, Time, Dt, Pass, Air);
+	public ArrayList<Flight> showCallsign(String C) {
+		return repo.findByCallsign(C);
+	}
+	
+	public String saveWithoutID(String Pic, String Des, int Time, Date Dt, int Pass, String Air, String Cal, int Land, String Sol) {
+		if(Sol.contentEquals("solo") || Sol.contentEquals("dual")) {
+		int ID = repo.findMaxIdnumber()+1;
+		Flight F1 = new Flight(ID, Pic, Des, Time, Dt, Pass, Air, Cal, Land, Sol);
 		repo.save(F1);
 		return "New Flight Saved";
+		}
+		return "Must be 'solo' or 'dual'";
 	}
 	
 	public String deleteFlight(int ID) {
@@ -58,6 +66,49 @@ public class FlightService {
 		int hours = all/60;
 		int mins = all%60;
 		return (hours + " hours and " + mins + " mins");
+	}
+	
+	public int sumAllLandings() {
+		return repo.sumAllLandings();
+	}
+	
+	public int sumAllLandingsDates(Date D1, Date D2) {
+		return repo.sumAllLandingsDates(D1, D2);
+	}
+	
+	public String sumAllFlighttimeSolo(String S) {
+		if(S.contentEquals("solo") || S.contentEquals("dual")) {
+		int all = repo.sumAllFlighttimeSolo(S);
+		int hours = all/60;
+		int mins = all%60;
+		return (hours + " hours and " + mins + " mins");
+		}
+		return "Must be 'solo' or 'dual'";
+	}
+	
+	public String sumAllFlighttimeSoloDates(String S, Date D1, Date D2) {
+		if(S.contentEquals("solo") || S.contentEquals("dual")) {
+			int all = repo.sumAllFlighttimeSoloDates(S, D1, D2);
+			int hours = all/60;
+			int mins = all%60;
+			return (hours + " hours and " + mins + " mins");
+			}
+			return "Must be 'solo' or 'dual'";
+	}
+	
+	public String sumAllFlighttimeCallsign(String C) {
+		try {
+			int all = repo.sumAllFlighttimeCallsign(C);
+			if(all > 0) {
+				int hours = all/60;
+				int mins = all%60;
+				return (hours + " hours and " + mins + " mins");
+			}
+			else return "Flight Time is 0 - check callsign";
+			}
+			catch(Exception e) {
+			return "Flight Time is 0 - check callsign";
+			}
 	}
 	
 	public String sumFlighttimeDates(Date D1, Date D2) {
@@ -75,13 +126,19 @@ public class FlightService {
 		}
 	}
 	
-	public String changeFlight(int Id, String Pic, String Des, int Time, Date Dt, int Pass, String Air) {
-		Flight F1 = repo.findByIdnumber(Id);
+	public String changeFlight(int ID, String Pic, String Des, int Time, Date Dt, int Pass, String Air, String Cal, int Land, String Sol) {
+		Flight F1 = repo.findByIdnumber(ID);
+		if(F1 == null)
+			return "Record not Found";
 		F1.setPicture(Pic);
 		F1.setDescription(Des);
 		F1.setFlighttime(Time);
 		F1.setFlightdate(Dt);
 		F1.setAirfield(Air);
+		F1.setCallsign(Cal);
+		F1.setLandings(Land);
+		F1.setSoloordual(Sol);
+		repo.save(F1);
 		return "Flight Changed";
 		
 	}

@@ -39,7 +39,7 @@ public class AirfieldService {
 	}
 	
 	public String saveWithoutID(String Pic, String Des, String Tip,String Pro,String Con,float Fee) {
-		int ID = (int)repo.count() + 1;
+		int ID = repo.findMaxIdnumber() + 1;
 		Airfield A1 = new Airfield(ID, Pic, Des, Tip, Pro, Con, Fee);
 		repo.save(A1);
 		return "New Airfield Saved";

@@ -17,5 +17,6 @@ public interface AirfieldRepo extends JpaRepository<Airfield, Integer> {
 	public ArrayList<Airfield> findByLandingfeeGreaterThan(float x);
 	public ArrayList<Airfield> findByLandingfeeLessThan(float x);
 	public ArrayList<Airfield> findByLandingfeeBetween(float x, float y);
-
+	
+	public int findMaxIdnumber();
 }

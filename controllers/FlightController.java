@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -51,16 +52,24 @@ public class FlightController {
 	public ArrayList<Flight> showAirfield(@PathVariable String R) {
 		return service.showAirfield(R);
 	}
+	
+	@GetMapping("/filterCallsign/{C}")
+	public ArrayList<Flight> showCallsign(@PathVariable String C) {
+		return service.showCallsign(C);
+	}
 		
-	@PostMapping("saveFlight/{Pic}/{Des}/{Time}/{Dt}/{Pass}/{Air}")
+	@PostMapping("/saveFlight/{Pic}/{Des}/{Time}/{Dt}/{Pass}/{Air}/{Cal}/{Land}/{Sol}")
 	public String saveWithoutID(
 			@PathVariable String Pic, 
 			@PathVariable String Des, 
 			@PathVariable int Time,
 			@PathVariable Date Dt,
 			@PathVariable int Pass,
-			@PathVariable String Air) {
-		return service.saveWithoutID(Pic, Des, Time, Dt, Pass, Air);
+			@PathVariable String Air,
+			@PathVariable String Cal,
+			@PathVariable int Land,
+			@PathVariable String Sol) {
+		return service.saveWithoutID(Pic, Des, Time, Dt, Pass, Air, Cal, Land, Sol);
 	}
 	
 	@DeleteMapping("/deleteFlight/{ID}")
@@ -68,25 +77,53 @@ public class FlightController {
 		return service.deleteFlight(ID);
 	}
 	
+	@GetMapping("/sumAllLandings") 
+	public int sumAllLandings() {
+		return service.sumAllLandings();
+	}
+	
+	@GetMapping("/sumAllLandingsDates/{D1}/{D2}")
+	public int sumAllLandingsDates(@PathVariable Date D1, @PathVariable Date D2) {
+		return service.sumAllLandingsDates(D1, D2);
+	}
 
-	@GetMapping("sumAllFlighttime")
+	@GetMapping("/sumAllFlighttime")
 	public String sumAllFlighttime() {
 		return service.sumAllFlighttime();
 	}
 	
-	@GetMapping("sumFlighttimeBetween/{D1}/{D2}")
+	@GetMapping("/sumAllFlighttimeSolo/{S}")
+	public String sumAllFlighttimeSolo(@PathVariable String S) {
+		return service.sumAllFlighttimeSolo(S);
+	}
+	
+	@GetMapping("/sumAllFlighttimeSoloDates/{S}/{D1}/{D2}")
+	public String sumAllFlighttimeSoloDates(@PathVariable String S, @PathVariable Date D1, @PathVariable Date D2) {
+		return service.sumAllFlighttimeSoloDates(S, D1, D2);
+	}
+	
+	@GetMapping("/sumAllFlighttimeCallsign/{C}")
+	public String sumAllFlighttimeCallsign(@PathVariable String C) {
+		return service.sumAllFlighttimeCallsign(C);
+	}
+	
+	@GetMapping("/sumFlighttimeBetween/{D1}/{D2}")
 	public String sumFlighttimeBetween(@PathVariable Date D1, @PathVariable Date D2) {
 		return service.sumFlighttimeDates(D1, D2);
 	}
 	
-	@PostMapping("changeFlight/{Id}/{Pic}/{Des}/{Time}/{Dt}/{Pass}/{Air}")
+	@PutMapping("/changeFlight/{Id}/{Pic}/{Des}/{Time}/{Dt}/{Pass}/{Air}/{Cal}/{Land}/{Sol}")
 	public String changeFlight(@PathVariable int Id,
 			@PathVariable String Pic, 
 			@PathVariable String Des, 
 			@PathVariable int Time,
 			@PathVariable Date Dt,
 			@PathVariable int Pass,
-			@PathVariable String Air) {
-		return service.changeFlight(Id, Pic, Des, Time, Dt, Pass, Air);
+			@PathVariable String Air,
+			@PathVariable String Cal,
+			@PathVariable int Land,
+			@PathVariable String Sol) {
+		return service.changeFlight(Id, Pic, Des, Time, Dt, Pass, Air, Cal, Land, Sol);
 	}
+
 }

@@ -2,10 +2,13 @@ package com.nationwide.flightlog.data;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "Airfield")
+@NamedQuery(name = "Airfield.findMaxIdnumber",
+			query = "select max(a.idnumber) from Airfield a")
 public class Airfield {
 	@Id
 	private int idnumber;
